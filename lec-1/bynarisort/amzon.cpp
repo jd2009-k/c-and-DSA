@@ -12,11 +12,6 @@ int main()
     int num;
     cin >> num;
     int lo = 0, hi = 1, mid;
-    for (; v[hi] <= num;)
-    {
-        lo = hi;
-        hi = hi * 2;
-    }
     for (; lo <= hi;)
     {
         mid = (long long int)(lo + hi) / 2;
