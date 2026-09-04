@@ -32,6 +32,5 @@ int main()
     {
         cout<<i<<" ";
     }
-    cout<<"Tirth";
 
 }
