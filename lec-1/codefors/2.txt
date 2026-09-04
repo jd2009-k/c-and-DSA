@@ -1,0 +1,31 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{ 
+    
+}
+int lcm(int a,int b)
+{
+   int i=0;
+   while (i<=a*b)
+   {
+      i++;
+      if(i%a==0 && i%b==0)
+      {
+         return i;
+      }
+
+   }
+    return a * b;
+}
+void input(vector<int>&v,int n)
+{ 
+    for(int i=0;i<n;i++)
+    {
+        int b;
+        cin>>b;
+        v.push_back(b);
+    }
+
+}

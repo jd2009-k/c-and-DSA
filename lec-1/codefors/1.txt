@@ -1,0 +1,43 @@
+   |   |   |   |   |   |   |   |   |   |   |   |   |   In build function  |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |  
+                  swap(a,b)--> It will swap A and B ;
+
+                  max(a,b,c...)---> It will give a maximum from a,b,c,d ........
+
+                  min(a,b,c,...)----->It will give a minimum from a,b,c,d ........
+
+                  cin.ignore()--> it ignor one linen That he is in |
+
+                  getline(cin,str); --> Please stay one night from tha input and go to anather line
+                  
+                  a = str.size() --> It will Give a size of Str and Save it in - a
+
+                  sort(v.bgin(),v.end()); --> sort vcater ;
+
+                  v.push_back(a);--> add a to tha end of vcater;
+
+                  v.instrt(adders of vcater,what you want to instrt)
+                          ( v.bgin() + i ,  A  ) 
+                  
+                  v.erase(adders of what you wnte to erase)
+
+                  string s="jay";
+
+                  s.size();--> Give string size
+
+                  s=to_string(x);--> if x=1234 than it will mack  s="1234"       
+
+                  s.reverse(v.bgin(),v.end()) 
+
+                  getline(cin,s);
+
+                  s = s + "xyz";
+                  s = "xyz" + s; 
+
+                  cout<<s.substr(idx,lenth); --> if s="abcdef"; and idx=3 lenth=2; than it will print "cd"
+
+                  cout<<s.substr(idx); --> if s="abcdef"; and idx=3  than it will print "cdef"; 
+
+                  int x=stoi(string); --> String two integer 
+                  
+
