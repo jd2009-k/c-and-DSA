@@ -1,37 +1,37 @@
-#include<bits/stdc++.h>
-using namespace std;                                        
+#include <bits/stdc++.h>
+using namespace std;
 
-int main()                                                  
-{                                                           
+int main()
+{
     int t, n, k;
     cin >> t;
-    
-    for(int i = 0; i < t; i++)
+
+    for (int i = 0; i < t; i++)
     {
         cin >> n >> k;
         int arr[n];
-        for(int j = 0; j < n; j++) 
+        for (int j = 0; j < n; j++)
         {
             cin >> arr[j];
         }
-        
+
         int b = 0;
-        
-        for(int loop = 0; ; loop++) 
+
+        for (int loop = 0;; loop++)
         {
             int a = 0;
-            for(int m = 0; m < n; m++)
+            for (int m = 0; m < n; m++)
             {
-                if(arr[m] >= k)
+                if (arr[m] >= k)
                     a++;
             }
-            
-            if(a == n) 
+
+            if (a == n)
             {
                 break;
             }
-            
-            for(int p = 0; p < n; p++) 
+
+            for (int p = 0; p < n; p++)
             {
                 arr[p] += 1;
             }
