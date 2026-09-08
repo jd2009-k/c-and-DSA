@@ -5,13 +5,13 @@ void marag(vector<int>& v1, vector<int>& v2, vector<int>& sum)
     int i = 0, j = 0, k = 0;
     for (;i < v1.size() && j < v2.size();)
     {
-        if (v1[i] <= v2[j])
+        if (v1[i] < v2[j])
         {
-            sum[k++] = v1[i++];
+            sum[k++] = v2[j++];
         }
         else
         {
-            sum[k++] = v2[j++];
+            sum[k++] = v1[i++];
         }
     }
     if (i == v1.size())
@@ -35,10 +35,12 @@ void maragsorat(vector<int>& v)
     maragsorat(v1);
     maragsorat(v2);
     marag(v1, v2, v);
+    v1.clear();
+    v2.clear();
 }
 int main()
 {
-    int n, m;
+    int n;
     cin >> n;
     vector<int>v(n), sum(n);
     for (int i = 0;i < n;i++)
