@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+void marag(vector<int>& v1, vector<int>& v2, vector<int>& sum)
 {
     int i = 0, j = 0, k = 0;
     for (;i < v1.size() && j < v2.size();)
@@ -30,7 +31,7 @@ void maragsorat(vector<int>& v)
     for (int i = 0;i < v1.size();i++)
         v1[i] = v[i];
     for (int i = 0;i < v2.size();i++)
-        v2[i] = v[n / 2  + i];
+        v2[i] = v[n / 2 + i];
     maragsorat(v1);
     maragsorat(v2);
     marag(v1, v2, v);
@@ -44,6 +45,6 @@ int main()
         cin >> v[i];
     maragsorat(v);
     for (int i = 0;i < n;i++)
-        cout << v[i]<<" ";
+        cout << v[i] << " ";
 
 }
