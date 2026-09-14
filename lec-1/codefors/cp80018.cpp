@@ -6,14 +6,19 @@ int main()
     cin >> test;
     for (int i = 0;i < test;i++)
     {
-        int n;
+        int n, c = 0, min = 0;
         cin >> n;
         for (int j = 0;j < n;j++)
         {
             int b;
             cin >> b;
-            cout << n - b + 1 << " ";
+            if (b == 1)
+                c = -1;
+            c++;
+            if (min < c)
+                min = c;
         }
+        cout << min;
         cout << endl;
     }
 
