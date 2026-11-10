@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Saved Progress • DSA Compass</title><style>
+:root{color-scheme:dark;font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:#141426;color:#f0f0ff}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 85% 12%,#30306b 0,transparent 38%),#141426}
+a{color:#c8fc79}button,input,textarea{font:inherit}button{cursor:pointer;border:0}header{padding:20px 5vw;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #373653;gap:12px;flex-wrap:wrap}
+.brand{font-weight:850;letter-spacing:-.04em;font-size:21px;color:#f4f0ff;text-decoration:none}.chip{border:1px solid #4e4a68;border-radius:30px;padding:8px 14px;color:#ded6f1;font-size:13px;text-decoration:none}
+main{width:min(980px,92vw);margin:35px auto 90px}
+h1{font-size:clamp(30px,6vw,54px);line-height:1.04;margin:0 0 12px;letter-spacing:-.045em}h2{margin:0 0 15px;font-size:22px}p{line-height:1.6;color:#c3c0d2}.muted{color:#aba9c4;font-size:13px}
+.card{background:#23233b;border:1px solid #42415d;border-radius:20px;padding:24px;box-shadow:4px 6px 0 #0d0b1c}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:7px;font-size:13px;color:#dfdef0}
+input,textarea,select{width:100%;border-radius:12px;border:1px solid #5b5873;padding:12px;background:#15152a;color:#fff;outline-offset:3px}
+input:focus,textarea:focus,select:focus{outline:2px solid #c8fc79}textarea{min-height:126px;resize:vertical}
+.row{display:flex;align-items:center;flex-wrap:wrap;gap:10px}.primary{background:#c8fc79;color:#14210d;border-radius:12px;padding:12px 18px;font-weight:800}.secondary{border:1px solid #6c6689;background:#353454;color:#fff;border-radius:12px;padding:11px 15px}.danger{background:#5b2948}
+button:disabled{opacity:.5;cursor:not-allowed}.small{font-size:12px;padding:8px 10px}
+.help{border-left:3px solid #bb9cff;padding-left:14px}.hidden{display:none!important}
+#msg{min-height:22px;margin:15px 0;color:#c8fc79}
+#entries{display:grid;gap:13px;margin-top:17px}.entry{border:1px solid #484664;background:#1b1b31;border-radius:14px;padding:16px}.entry h3{margin:0;color:#f8f6ff;font-size:16px}
+.status{border-radius:30px;background:#363451;padding:5px 10px;font-size:12px;color:#dbd3f4}
+.solved{background:#3b5832;color:#dbffb5}
+.entry .field{margin-top:12px}.entry-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
+.top-space{margin-top:24px}.count{font-size:15px;color:#c8fc79;font-weight:700}
+@media(max-width:650px){.grid{grid-template-columns:1fr}header{padding:16px 4vw}main{margin-top:24px}.card{padding:17px}}
+</style></head><body>
+<header><a class="brand" href="/">✦ DSA Compass</a><div class="row"><a class="chip" href="/">← Website</a><a class="chip" href="/today">Original workspace</a></div></header>
+<main>
+<p style="color:#c8fc79;font-weight:750;letter-spacing:.14em;font-size:12px">YOUR CODING JOURNEY</p>
+<h1>Save every <span style="color:#bb9cff">breakthrough.</span></h1>
+<p>Track solved problems and keep your approach, notes, and mistakes. Signed-in progress is securely stored online so you can return on another device.</p>
+<section id="auth" class="card top-space">
+<h2>Sign in to save progress</h2>
+<p class="muted">Use a DSA Compass email account, or create one. This is separate from the original ChatGPT-hosted site's sign-in.</p>
+<form id="authform"><div class="grid"><label class="field">Email<input id="email" type="email" autocomplete="email" required placeholder="you@example.com"></label><label class="field">Password<input id="password" type="password" autocomplete="current-password" minlength="6" required placeholder="Your password"></label></div><div class="row" style="margin-top:17px"><button class="primary" type="submit" id="signin">Sign in</button><button class="secondary" type="button" id="signup">Create account</button></div></form>
+<p class="muted help">If you created an account just now, check your email for a confirmation link if asked. No password is stored by this page.</p>
+</section>
+<section id="app" class="hidden">
+<div class="row" style="justify-content:space-between;margin:25px 0 15px"><div><span class="count" id="stats"></span><div class="muted" id="account"></div></div><button id="signout" class="secondary">Sign out</button></div>
+<div class="card">
+<h2>Add a problem</h2>
+<form id="newform"><div class="grid"><label class="field">Problem ID or link<input id="problem" required maxlength="240" placeholder="e.g. 4A, original:running-total, or a URL"></label><label class="field">Progress<select id="newstatus"><option value="in_progress">In progress</option><option value="solved">Solved ✓</option></select></label></div><div class="row" style="margin-top:16px"><button class="primary" type="submit">Save problem</button><span class="muted">Changes to notes save automatically.</span></div></form></div>
+<div class="row" style="justify-content:space-between;margin-top:27px"><h2 style="margin:0">My saved problems</h2><button id="reload" class="secondary small">Refresh</button></div>
+<div id="entries"></div>
+<p class="muted">Saved data is private to your signed-in account. Changes made offline remain as local drafts on this device until synced.</p>
+</section>
+<p role="status" aria-live="polite" id="msg"></p>
+</main>
+<script>
+"use strict";
+const BASE="https://mvpnlohiscshbqsfcxrm.supabase.co";
+const KEY="sb_publishable_Aa52tDuyhFWiY-OR8NU8XQ_zc2Pubyh";
+const STORAGE="dsa-compass-progress-session-v1";
+const draftsKey="dsa-compass-progress-drafts-v1";
+let session=null,items=[],pending=new Map(),timers=new Map(),syncing=false;
+const $=id=>document.getElementById(id);
+const message=(s,bad=false)=>{const el=$("msg");el.style.color=bad?"#ffb2b2":"#c8fc79";el.textContent=s};
+function storeSession(s){session=s;if(s)localStorage.setItem(STORAGE,JSON.stringify(s));else localStorage.removeItem(STORAGE)}
+function credentials(){return {"apikey":KEY,"Authorization":"Bearer "+(session?.access_token??KEY),"content-type":"application/json"}}
+async function api(path,opts={}){let res=await fetch(BASE+path,{...opts,headers:{...credentials(),...(opts.headers||{})}});if(res.status===401&&session?.refresh_token){await refresh();res=await fetch(BASE+path,{...opts,headers:{...credentials(),...(opts.headers||{})}})}let data=await res.text();let out=data?JSON.parse(data):null;if(!res.ok)throw new Error(out?.msg||out?.error_description||out?.message||out?.error||"Request failed ("+res.status+")");return out}
+async function refresh(){if(!session?.refresh_token)throw Error("Session expired. Please sign in.");const res=await fetch(BASE+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:{"apikey":KEY,"content-type":"application/json"},body:JSON.stringify({refresh_token:session.refresh_token})});const j=await res.json();if(!res.ok){storeSession(null);show(false);throw Error("Please sign in again.")}storeSession(j);return j}
+async function ensureSession(){if(!session)return false;if(Date.now()/1000>=Number(session.expires_at||0)-90)await refresh();return true}
+function show(ok){$("auth").classList.toggle("hidden",ok);$("app").classList.toggle("hidden",!ok);if(ok)$("account").textContent=session?.user?.email||"Signed in"}
+async function login(create){const email=$("email").value.trim(),password=$("password").value;if(!email||password.length<6)return message("Enter your email and a password of at least six characters.",true);$("signin").disabled=true;$("signup").disabled=true;try{
+if(create){const j=await api("/auth/v1/signup",{method:"POST",body:JSON.stringify({email,password})});if(!j.access_token){message("Account created. Check your email to verify it, then sign in.");return}storeSession(j)}
+else{const j=await api("/auth/v1/token?grant_type=password",{method:"POST",body:JSON.stringify({email,password})});storeSession(j)}
+$("password").value="";show(true);await load();message("Signed in. Your progress can now sync across devices.")
+}catch(e){message(e.message,true)}finally{$("signin").disabled=false;$("signup").disabled=false}}
+$("authform").addEventListener("submit",e=>{e.preventDefault();login(false)});$("signup").addEventListener("click",()=>login(true));
+$("signout").addEventListener("click",async()=>{const s=session;storeSession(null);show(false);items=[];render();message("Signed out. Saved online progress was kept.");if(s?.access_token){try{await fetch(BASE+"/auth/v1/logout",{method:"POST",headers:{"apikey":KEY,Authorization:"Bearer "+s.access_token}})}catch{}}});
+function draftStore(){try{return JSON.parse(localStorage.getItem(draftsKey)||"{}")}catch{return {}}}
+function saveDraft(id,notes){const d=draftStore();d[id]=notes;localStorage.setItem(draftsKey,JSON.stringify(d))}
+function clearDraft(id){const d=draftStore();delete d[id];localStorage.setItem(draftsKey,JSON.stringify(d))}
+function make(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}
+function render(){const done=items.filter(x=>x.status==="solved").length;$("stats").textContent=items.length+" saved · "+done+" solved";const list=$("entries");list.replaceChildren();if(!items.length){list.append(make("p","muted","No problems saved yet. Add your first one above."));return}
+for(const p of items){const card=make("article","entry");const row=make("div","row");const title=make("h3","",p.problem_id);const state=make("span","status"+(p.status==="solved"?" solved":""),p.status==="solved"?"Solved ✓":"In progress");row.append(title,state);card.append(row);
+const label=make("label","field","Notes / approach / mistakes");const ta=make("textarea");ta.maxLength=30000;ta.placeholder="What worked? What did you learn?";const drafts=draftStore();ta.value=Object.prototype.hasOwnProperty.call(drafts,p.problem_id)?drafts[p.problem_id]:p.notes;ta.setAttribute("aria-label","Notes for "+p.problem_id);ta.addEventListener("input",()=>{saveDraft(p.problem_id,ta.value);const prev=timers.get(p.problem_id);if(prev)clearTimeout(prev);note.textContent="Unsaved draft";timers.set(p.problem_id,setTimeout(()=>save(p.problem_id,{notes:ta.value},note),850))});label.append(ta);card.append(label);
+const actions=make("div","entry-actions");const toggle=make("button","secondary small",p.status==="solved"?"Mark in progress":"Mark solved ✓");toggle.onclick=()=>save(p.problem_id,{status:p.status==="solved"?"in_progress":"solved"},note);const remove=make("button","secondary small danger","Delete");remove.onclick=()=>{if(confirm("Remove this saved problem?"))removeProblem(p.problem_id)};const note=make("span","muted","Updated "+new Date(p.updated_at).toLocaleString());actions.append(toggle,remove,note);card.append(actions);list.append(card)}}
+async function load(){await ensureSession();const j=await api("/rest/v1/dsa_saved_progress?select=problem_id,status,notes,updated_at&order=updated_at.desc",{method:"GET"});items=j||[];show(true);render()}
+async function save(id,change,note){if(!session)return;const p=items.find(x=>x.problem_id===id);if(!p)return;const next={...p,...change};try{await ensureSession();const j=await api("/rest/v1/dsa_saved_progress?on_conflict=user_id,problem_id",{method:"POST",headers:{"Prefer":"resolution=merge-duplicates,return=representation"},body:JSON.stringify({user_id:session.user.id,problem_id:id,status:next.status,notes:next.notes,updated_at:new Date().toISOString()})});Object.assign(p,j?.[0]||next);if(change.notes!==undefined)clearDraft(id);note.textContent="Saved ✓";const count=items.filter(x=>x.status==="solved").length;$("stats").textContent=items.length+" saved · "+count+" solved";render()}catch(e){note.textContent="Local draft saved; cloud save failed";message(e.message,true)}}
+$("newform").addEventListener("submit",async e=>{e.preventDefault();const id=$("problem").value.trim();if(!id)return;try{await ensureSession();await api("/rest/v1/dsa_saved_progress?on_conflict=user_id,problem_id",{method:"POST",headers:{"Prefer":"resolution=merge-duplicates,return=minimal"},body:JSON.stringify({user_id:session.user.id,problem_id:id,status:$("newstatus").value,updated_at:new Date().toISOString()})});$("problem").value="";await load();message("Progress saved online.")}catch(err){message(err.message,true)}});
+async function removeProblem(id){try{await ensureSession();await api("/rest/v1/dsa_saved_progress?problem_id=eq."+encodeURIComponent(id)+"&user_id=eq."+session.user.id,{method:"DELETE"});clearDraft(id);await load();message("Problem removed.")}catch(e){message(e.message,true)}}
+$("reload").onclick=()=>load().catch(e=>message(e.message,true));
+(async()=>{try{const old=localStorage.getItem(STORAGE);if(old){session=JSON.parse(old);if(await ensureSession())await load();else show(false)}}catch(e){storeSession(null);show(false);message("Please sign in again to access saved progress.",true)}})();
+</script></body></html>
